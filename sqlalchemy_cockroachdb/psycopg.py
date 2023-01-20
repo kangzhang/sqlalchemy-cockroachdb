@@ -1,14 +1,16 @@
 from sqlalchemy import util
 from sqlalchemy.dialects.postgresql.psycopg import PGDialect_psycopg
-from .base import CockroachDBDialect
+from ._psycopg_common import _CockroachDBDialect_common_psycopg
 from .ddl_compiler import CockroachDDLCompiler
+from .stmt_compiler import CockroachCompiler
 from .stmt_compiler import CockroachIdentifierPreparer
 
 
-class CockroachDBDialect_psycopg(PGDialect_psycopg, CockroachDBDialect):
+class CockroachDBDialect_psycopg(_CockroachDBDialect_common_psycopg, PGDialect_psycopg):
     driver = "psycopg"  # driver name
     preparer = CockroachIdentifierPreparer
     ddl_compiler = CockroachDDLCompiler
+    statement_compiler = CockroachCompiler
 
     supports_statement_cache = True
 
