@@ -1,3 +1,4 @@
+from psycopg.crdb import connect as crdb_connect
 from sqlalchemy import util
 from sqlalchemy.dialects.postgresql.psycopg import PGDialect_psycopg
 from ._psycopg_common import _CockroachDBDialect_common_psycopg
@@ -19,3 +20,11 @@ class CockroachDBDialect_psycopg(_CockroachDBDialect_common_psycopg, PGDialect_p
         from psycopg.types import json
         new_json = type('foo', (), {'Json': json.Jsonb, 'Jsonb': json.Jsonb})
         return new_json
+
+    def connect(
+        self,
+        disable_cockroachdb_telemetry=False,
+        **kwargs,
+    ):
+        self.disable_cockroachdb_telemetry = util.asbool(disable_cockroachdb_telemetry)
+        return crdb_connect(**kwargs)
